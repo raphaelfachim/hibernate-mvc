@@ -15,6 +15,7 @@ public class TransactionManager implements ITransactionManager{
         private Session session;
 
         public TransactionManager() {
+            System.out.println("Creating Session Factory");
             createSessionFactory();
         }
     

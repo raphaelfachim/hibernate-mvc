@@ -5,6 +5,10 @@
  */
 package dev.cliente;
 
+import dev.servidor.dto.ProfileDTO;
+import dev.servidor.model.UserViewModel;
+import java.text.SimpleDateFormat;
+
 /**
  *
  * @author raphael.fachim
@@ -16,6 +20,8 @@ public class ProfileView extends javax.swing.JFrame {
      */
     public ProfileView() {
         initComponents();
+        getUserInfo();
+        
     }
 
     /**
@@ -207,4 +213,16 @@ public class ProfileView extends javax.swing.JFrame {
     private javax.swing.JTextField txtFieldMessages;
     private javax.swing.JTextField txtFieldUser;
     // End of variables declaration//GEN-END:variables
+
+    private void getUserInfo() {
+        ProfileDTO profile = UserViewModel.getProfile(1l);
+        this.txtFieldUser.setText(profile.getFullName());
+        
+        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        if(profile.getCreated() != null){
+            this.txtFieldCreated.setText(fmt.format(profile.getCreated()));
+        } else {
+             this.txtFieldCreated.setText("Data not available");
+        }
+    }
 }
