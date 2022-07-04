@@ -1,20 +1,48 @@
 package dev.servidor.bo.transactionmanager;
 
-public class TransactionManager implements ITransactionManager{
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
+public class TransactionManager implements ITransactionManager{
+    
+        public SessionFactory sessionFactory;
+        
+        private ServiceRegistry serviceRegistry;
+        
+        private Session session;
+
+        public TransactionManager() {
+            createSessionFactory();
+        }
+    
 	public void beginTransaction() {
-		// TODO Auto-generated method stub
-		
+            this.session = this.sessionFactory.openSession();
+            this.session.beginTransaction();
 	}
 
 	public void commit() {
-		// TODO Auto-generated method stub
-		
+            this.session.getTransaction().commit();
+            this.session.close();
 	}
 
 	public void rollback() {
-		// TODO Auto-generated method stub
-		
+            this.session.getTransaction().rollback();
+            this.session.close();
 	}
+
+        public Session getSession() {
+            return session;
+        }
+
+        public void createSessionFactory() {
+                Configuration configuration = new Configuration();
+                configuration.configure();
+                serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+                        configuration.getProperties()).build();
+                this.sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+        }
 
 }

@@ -1,11 +1,11 @@
-dev\servidor\bean\Profile.class
-dev\servidor\testpackage\TestClass.class
 dev\servidor\bo\ProfileBO.class
 dev\servidor\bean\Message.class
 dev\servidor\dao\implementation\MessageDAO.class
 dev\servidor\bo\transactionmanager\TransactionManager.class
 dev\servidor\bo\MessageBO.class
 dev\servidor\dao\implementation\ProfileDAO.class
+dev\servidor\bean\Profile.class
+dev\servidor\testpackage\TestClass.class
 dev\servidor\dao\GenericDAO.class
 dev\servidor\dao\interfaces\IProfileDAO.class
 dev\servidor\bo\transactionmanager\ITransactionManager.class

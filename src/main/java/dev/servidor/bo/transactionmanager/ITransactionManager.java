@@ -8,4 +8,5 @@ public interface ITransactionManager {
 	
 	public void rollback();
 	
+        public void createSessionFactory();
 }
