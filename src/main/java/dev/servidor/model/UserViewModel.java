@@ -29,7 +29,7 @@ public class UserViewModel {
         } 
     }
     
-    public static ProfileDTO getProfile(Long profileId){
+    public static ProfileDTO getProfileById(Long profileId){
         ProfileDTO profile;
         try{
             tm.beginTransaction();
@@ -38,7 +38,21 @@ public class UserViewModel {
             return profile;
         } catch(Exception ex){
             tm.rollback();
-            System.out.println(ex);
+            System.out.println("Erro no método getProfileById [UserViewModel] " + ex);
+            return null;
+        } 
+    }
+    
+    public static ProfileDTO getProfileByFullName(String fullName){
+        ProfileDTO profile;
+        try{
+            tm.beginTransaction();
+            profile = ProfileBO.getProfileByFullName(tm, fullName);
+            tm.commit();
+            return profile;
+        } catch(Exception ex){
+            tm.rollback();
+            System.out.println("Erro no método getProfileByFullName [UserViewModel] " + ex);;
             return null;
         } 
     }

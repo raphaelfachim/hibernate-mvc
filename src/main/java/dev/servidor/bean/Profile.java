@@ -40,6 +40,13 @@ public class Profile implements Serializable {
 		super();
 	}
 
+        public Profile(String name, String lastName, Date creationDate, Date birthDate) {
+            this.name = name;
+            this.lastName = lastName;
+            this.creationDate = creationDate;
+            this.birthDate = birthDate;
+        }
+
 	public Profile(Long id, String name, String lastName, Date creationDate, Date birthDate, Message messages) {
 		super();
 		this.id = id;

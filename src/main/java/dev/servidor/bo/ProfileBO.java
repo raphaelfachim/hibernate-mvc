@@ -4,6 +4,9 @@ import dev.servidor.bo.transactionmanager.TransactionManager;
 import dev.servidor.bean.Profile;
 import dev.servidor.dao.implementation.ProfileDAO;
 import dev.servidor.dto.ProfileDTO;
+import dev.servidor.util.DateUtils;
+import java.text.ParseException;
+import java.util.Date;
 
 public class ProfileBO {
     
@@ -14,10 +17,32 @@ public class ProfileBO {
     }
 
     public static ProfileDTO getProfileById(TransactionManager tm, Long profileId) {
-        System.out.println("Início do método [getProfileById]");
-        Profile profile = (Profile) tm.getSession().get(Profile.class, profileId);
-        ProfileDTO profileDto = new ProfileDTO();
-        profileDto.setFullName(profile.getName() + " " + profile.getLastName());
-        return profileDto;
+        Profile profile = profileDao.getProfileById(tm, profileId);
+        return createProfileDTO(profile);
+    }
+
+    public static ProfileDTO getProfileByFullName(TransactionManager tm, String fullName) {
+        Profile profile = profileDao.getProfileByFullName(tm, fullName);
+        return createProfileDTO(profile);
+    }
+    
+    public static ProfileDTO createProfileDTO(Profile profile){
+        ProfileDTO profileDTO = new ProfileDTO(
+                profile.getName() + " " + profile.getLastName(),
+                profile.getCreationDate()
+        );
+        return profileDTO;
+    }
+    
+    public static Profile crateProfile(String name, String lastName, String dateOfBith){
+        Date birthDate;
+        try{
+            birthDate = DateUtils.getDateFromString(dateOfBith);
+        } catch (ParseException parseEx) {
+            birthDate = null;
+        }
+        return new Profile(
+                name, lastName, new Date(), birthDate
+        );
     }
 }
