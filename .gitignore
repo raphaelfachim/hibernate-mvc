@@ -1,1 +1,9 @@
 *.class
+target/dev-0.0.1-SNAPSHOT.jar
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+target/maven-archiver/pom.properties
+target/classes/hibernate.cfg.xml
+src/main/resources/hibernate.cfg.xml
+target/classes/.netbeans_automatic_build
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst

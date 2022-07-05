@@ -9,8 +9,17 @@ import org.hibernate.criterion.Restrictions;
 
 public class ProfileDAO extends GenericDAO implements IProfileDAO{
     
+    public Profile save(TransactionManager tm, Profile profile){
+        tm.getSession().save(profile);
+        return profile;
+    }
+    
     public Profile getProfileById(TransactionManager tm, Long profileId){
-        return (Profile) tm.getSession().get(Profile.class, profileId);
+        try{
+            return (Profile) tm.getSession().get(Profile.class, profileId);
+        } catch(Exception ex){
+            return null;
+        }
     }
     
     public Profile getProfileByFullName(TransactionManager tm, String fullName){

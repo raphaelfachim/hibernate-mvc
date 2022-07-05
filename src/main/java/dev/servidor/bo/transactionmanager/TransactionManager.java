@@ -20,19 +20,31 @@ public class TransactionManager implements ITransactionManager{
         }
     
 	public void beginTransaction() {
-            this.session = this.sessionFactory.openSession();
             this.session.beginTransaction();
 	}
 
 	public void commit() {
             this.session.getTransaction().commit();
-            this.session.close();
 	}
 
 	public void rollback() {
             this.session.getTransaction().rollback();
-            this.session.close();
 	}
+        
+        public void openSession() {
+            System.out.println("[openSession()]");
+            this.session = this.sessionFactory.openSession();
+        }
+        
+        public void closeSession(){
+            System.out.println("[closeSession()]");
+            this.session.close();
+        }
+        
+        public void closeSessionFactory(){
+            System.out.println("[closeSessionFactory()]");
+            this.sessionFactory.close();
+        }
 
         public Session getSession() {
             return session;
@@ -43,7 +55,7 @@ public class TransactionManager implements ITransactionManager{
                 configuration.configure();
                 serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
                         configuration.getProperties()).build();
-                this.sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+                this.sessionFactory = configuration.buildSessionFactory(serviceRegistry);      
         }
 
 }

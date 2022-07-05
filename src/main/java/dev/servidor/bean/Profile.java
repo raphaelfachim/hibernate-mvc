@@ -1,10 +1,13 @@
 package dev.servidor.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,8 +36,8 @@ public class Profile implements Serializable {
         @Temporal(javax.persistence.TemporalType.DATE)
 	private Date birthDate;
         
-	@Column(name = "MESSAGES")
-	private Message messages;
+        @OneToMany(mappedBy = "profile")
+	private Collection<Message> messages = new ArrayList();
 
 	public Profile() {
 		super();
@@ -47,7 +50,7 @@ public class Profile implements Serializable {
             this.birthDate = birthDate;
         }
 
-	public Profile(Long id, String name, String lastName, Date creationDate, Date birthDate, Message messages) {
+	public Profile(Long id, String name, String lastName, Date creationDate, Date birthDate, Collection<Message> messages) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -97,11 +100,11 @@ public class Profile implements Serializable {
 		this.birthDate = birthDate;
 	}
 
-	public Message getMessages() {
+	public Collection<Message> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(Message messages) {
+	public void setMessages(Collection<Message> messages) {
 		this.messages = messages;
 	}
 	

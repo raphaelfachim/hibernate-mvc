@@ -4,7 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 
@@ -12,13 +18,15 @@ import javax.persistence.Temporal;
 public class Message implements Serializable {
 	
         @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "ID")
 	private Long id;
         
-	@Column(name = "MESSAGE")
+	@Column(name = "MESSAGE_TEXT")
 	private String message;
         
-	@Column(name = "PROFILE")
+        @ManyToOne
+        @JoinColumn(name="PROFILE_ID")
 	private Profile profile;
         
 	@Column(name = "DATE")
@@ -36,6 +44,12 @@ public class Message implements Serializable {
 		this.profile = profile;
 		this.date = date;
 	}
+
+        public Message(String message, Profile profile, Date date) {
+            this.message = message;
+            this.profile = profile;
+            this.date = date;
+        }
 
 	public Long getId() {
 		return id;

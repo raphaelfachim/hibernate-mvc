@@ -18,6 +18,9 @@ public class ProfileView extends javax.swing.JFrame {
     /**
      * Creates new form ProfileView
      */
+    
+    UserViewModel userViewModel = new UserViewModel();
+    
     public ProfileView() {
         initComponents();
         getUserInfo();
@@ -215,7 +218,7 @@ public class ProfileView extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void getUserInfo() {
-        ProfileDTO profile = UserViewModel.getProfileById(1l);
+        ProfileDTO profile = userViewModel.getProfileById(1l);
         this.txtFieldUser.setText(profile.getFullName());
         
         SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");

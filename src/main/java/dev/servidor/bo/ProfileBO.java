@@ -12,29 +12,40 @@ public class ProfileBO {
     
     private static final ProfileDAO profileDao = new ProfileDAO();
     
-    public static void saveProfile(TransactionManager tm, Profile profile){
-           tm.getSession().save(profile);
+    private final TransactionManager tm;
+
+    public ProfileBO(TransactionManager tm) {
+        this.tm = tm;
     }
 
-    public static ProfileDTO getProfileById(TransactionManager tm, Long profileId) {
+    public Profile saveProfile(Profile profile){
+           return profileDao.save(tm, profile);
+    }
+
+    public ProfileDTO getProfileDTOById(Long profileId) {
         Profile profile = profileDao.getProfileById(tm, profileId);
         return createProfileDTO(profile);
     }
+    
+    public Profile getProfileById(Long profileId) {
+        return profileDao.getProfileById(tm, profileId);
+    }
 
-    public static ProfileDTO getProfileByFullName(TransactionManager tm, String fullName) {
+    public ProfileDTO getProfileByFullName(String fullName) {
         Profile profile = profileDao.getProfileByFullName(tm, fullName);
         return createProfileDTO(profile);
     }
     
-    public static ProfileDTO createProfileDTO(Profile profile){
+    public ProfileDTO createProfileDTO(Profile profile){
         ProfileDTO profileDTO = new ProfileDTO(
+                profile.getId(),
                 profile.getName() + " " + profile.getLastName(),
                 profile.getCreationDate()
         );
         return profileDTO;
     }
     
-    public static Profile crateProfile(String name, String lastName, String dateOfBith){
+    public Profile crateProfile(String name, String lastName, String dateOfBith){
         Date birthDate;
         try{
             birthDate = DateUtils.getDateFromString(dateOfBith);
