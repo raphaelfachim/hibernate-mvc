@@ -6,7 +6,9 @@ import dev.servidor.dao.implementation.ProfileDAO;
 import dev.servidor.dto.ProfileDTO;
 import dev.servidor.util.DateUtils;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ProfileBO {
     
@@ -40,7 +42,8 @@ public class ProfileBO {
         ProfileDTO profileDTO = new ProfileDTO(
                 profile.getId(),
                 profile.getName() + " " + profile.getLastName(),
-                profile.getCreationDate()
+                profile.getCreationDate(),
+                profile.getBirthDate()
         );
         return profileDTO;
     }
@@ -55,5 +58,13 @@ public class ProfileBO {
         return new Profile(
                 name, lastName, new Date(), birthDate
         );
+    }
+
+    public List<ProfileDTO> getAllProfiles() {
+        List<ProfileDTO> profiles = new ArrayList<ProfileDTO>();
+        for(Profile profile : profileDao.getAllProfiles(tm)){
+            profiles.add(createProfileDTO(profile));
+        }
+        return profiles;
     }
 }

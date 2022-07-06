@@ -14,14 +14,17 @@ public class ProfileDTO {
     private String fullName;
     
     private Date created;
+    
+    private Date bithDate;
 
     public ProfileDTO() {
     }
 
-    public ProfileDTO(Long id, String fullName, Date created) {
+    public ProfileDTO(Long id, String fullName, Date created, Date birthDate) {
         this.id = id;
         this.fullName = fullName;
         this.created = created;
+        this.bithDate = birthDate;
     }
 
     public Long getId() {
@@ -46,6 +49,14 @@ public class ProfileDTO {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public Date getBithDate() {
+        return bithDate;
+    }
+
+    public void setBithDate(Date bithDate) {
+        this.bithDate = bithDate;
     }
     
 }

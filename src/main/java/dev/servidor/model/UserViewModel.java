@@ -11,7 +11,9 @@ import dev.servidor.bo.MessageBO;
 import dev.servidor.bo.ProfileBO;
 import dev.servidor.bo.transactionmanager.TransactionManager;
 import dev.servidor.dto.ProfileDTO;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -30,8 +32,6 @@ public class UserViewModel {
         this.profileBo = new ProfileBO(tm);
         this.messageBo = new MessageBO(tm);
     }
-    
-    
     
     public Profile saveProfile(Profile profile){
         Profile newProfile;
@@ -124,6 +124,23 @@ public class UserViewModel {
         } catch(Exception ex){
             tm.rollback();
             System.out.println("Erro no método getProfileByFullName [UserViewModel] " + ex);;
+            return null;
+        } finally {
+            tm.closeSession();
+        }
+    }
+    
+     public List<ProfileDTO> getAllProfiles(){
+        List<ProfileDTO> profiles;
+        try{
+            tm.openSession();
+            tm.beginTransaction();
+            profiles = profileBo.getAllProfiles();
+            tm.commit();
+            return profiles;
+        } catch(Exception ex){
+            tm.rollback();
+            System.out.println("Erro no método getAllProfiles [UserViewModel] " + ex);;
             return null;
         } finally {
             tm.closeSession();
