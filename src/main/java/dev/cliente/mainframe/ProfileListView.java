@@ -5,29 +5,33 @@
  */
 package dev.cliente.mainframe;
 
-import com.sun.javafx.scene.control.skin.TableColumnHeader;
+import dev.cliente.baseinternal.BaseInternalFrame;
 import dev.cliente.register.RegisterView;
 import dev.cliente.userprofile.ProfileView;
 import dev.servidor.dto.ProfileDTO;
 import dev.servidor.model.UserViewModel;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
 /**
  *
  * @author raphael.fachim
  */
-public class MainView extends javax.swing.JFrame {
+public class ProfileListView extends BaseInternalFrame {
     
     private List<ProfileDTO> profilesDTO = new ArrayList<ProfileDTO>();
     /**
      * Creates new form MainView
      */
-    public MainView() {
+    MainFrame mainFrame;
+    
+    UserViewModel userViewModel = new UserViewModel();
+    
+    public ProfileListView(MainFrame mainFrame) {
         initComponents();
         
+        this.mainFrame = mainFrame;
         getUsersList();
     }
 
@@ -52,7 +56,10 @@ public class MainView extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableUsers = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setClosable(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximizable(true);
+        setResizable(true);
 
         btnNewUser.setText("New User");
         btnNewUser.addActionListener(new java.awt.event.ActionListener() {
@@ -204,8 +211,7 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnNewUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewUserActionPerformed
-        RegisterView newUser = new RegisterView();
-        newUser.setVisible(true);
+        openSingInView();
     }//GEN-LAST:event_btnNewUserActionPerformed
 
     private void btnOpenProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenProfileActionPerformed
@@ -215,41 +221,6 @@ public class MainView extends javax.swing.JFrame {
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
        getUsersList();
     }//GEN-LAST:event_btnRefreshActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainView().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
@@ -266,16 +237,15 @@ public class MainView extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void getUsersList() {
-        UserViewModel userViewModel = new UserViewModel();
+        
         this.setProfilesDTO(userViewModel.getAllProfiles());
-        UserTableModel userTableModel = new UserTableModel(this.getProfilesDTO());
+        ProfileTableModel userTableModel = new ProfileTableModel(this.getProfilesDTO());
         this.tableUsers.setModel(userTableModel);
         
         configTableHeaders();
     }
     
     private void configTableHeaders(){
-        
         TableColumnModel usersTableHeader = this.tableUsers.getTableHeader().getColumnModel();
         
         usersTableHeader.getColumn(0).setHeaderValue("User Name");
@@ -283,7 +253,6 @@ public class MainView extends javax.swing.JFrame {
         usersTableHeader.getColumn(2).setHeaderValue("Creation Date");
         usersTableHeader.getColumn(3).setHeaderValue("Birth Date");
         usersTableHeader.getColumn(4).setHeaderValue("User Id");
-        
     }
 
     public List<ProfileDTO> getProfilesDTO() {
@@ -296,8 +265,15 @@ public class MainView extends javax.swing.JFrame {
 
     private void openProfile() {
         Integer selectedProfile = this.tableUsers.getSelectedRow();
-        ProfileView profileView = new ProfileView(this.getProfilesDTO().get(selectedProfile));
+        ProfileView profileView = new ProfileView(this.mainFrame, this.userViewModel, this.getProfilesDTO().get(selectedProfile));
+        this.mainFrame.getMainDesktopPane().add(profileView);
         profileView.setVisible(true);
+    }
+    
+    private void openSingInView(){
+        RegisterView newUser = new RegisterView(this.mainFrame);
+        this.mainFrame.getMainDesktopPane().add(newUser);
+        newUser.setVisible(true);
     }
     
 }

@@ -27,12 +27,12 @@ public class MessageDAO extends GenericDAO implements IMessageDAO{
         return (Message) tm.getSession().get(Message.class, messageId);
     }
 
-    public List<Message> getMessageByProfile(TransactionManager tm, Profile profile) {
+    public List<Message> getMessageByProfile(TransactionManager tm, Long profileId) {
         Criteria criteria;
         try{
             criteria = tm.getSession().createCriteria(Message.class, "message");
             criteria.createAlias("profile", "profile");
-            criteria.add(Restrictions.eq("profile.id", profile.getId()));
+            criteria.add(Restrictions.eq("profile.id", profileId));
             
             return criteria.list();
             

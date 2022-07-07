@@ -5,28 +5,41 @@
  */
 package dev.cliente.userprofile;
 
+import dev.cliente.mainframe.MainFrame;
+import dev.servidor.dto.MessageDTO;
 import dev.servidor.dto.ProfileDTO;
 import dev.servidor.model.UserViewModel;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
  * @author raphael.fachim
  */
-public class ProfileView extends javax.swing.JFrame {
+public class ProfileView extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form ProfileView
      */
     
-    UserViewModel userViewModel = new UserViewModel();
+    MainFrame mainFrame;
     ProfileDTO profile;
     
-    public ProfileView(ProfileDTO profile) {
+    List<MessageDTO> messagesDTO = new ArrayList<MessageDTO>();
+    
+    UserViewModel userViewModel;
+    
+    public ProfileView(MainFrame mainFrame, UserViewModel userViewModel, ProfileDTO profile) {
         initComponents();
-        this.profile = profile;
-        setUserInfo();
         
+        this.mainFrame = mainFrame;
+        this.userViewModel = userViewModel;
+        this.profile = profile;
+        
+        setUserInfo();
+        getMessagesList();
     }
 
     /**
@@ -43,16 +56,16 @@ public class ProfileView extends javax.swing.JFrame {
         lblDateOfBirth = new javax.swing.JLabel();
         lblUser = new javax.swing.JLabel();
         lblCreated = new javax.swing.JLabel();
-        lblActiveMessages = new javax.swing.JLabel();
         txtFieldUser = new javax.swing.JTextField();
         txtFieldDateOfBirth = new javax.swing.JTextField();
         txtFieldCreated = new javax.swing.JTextField();
         panelUserMessages = new javax.swing.JPanel();
-        txtFieldMessages = new javax.swing.JTextField();
+        lblActiveMessages = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableMessages = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         btnClose = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        btnNewMessage = new javax.swing.JButton();
 
         panelUserPhoto.setPreferredSize(new java.awt.Dimension(160, 160));
 
@@ -64,7 +77,7 @@ public class ProfileView extends javax.swing.JFrame {
         );
         panelUserPhotoLayout.setVerticalGroup(
             panelUserPhotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 178, Short.MAX_VALUE)
         );
 
         lblDateOfBirth.setText("Date of Birth:");
@@ -72,8 +85,6 @@ public class ProfileView extends javax.swing.JFrame {
         lblUser.setText("User: ");
 
         lblCreated.setText("Created:");
-
-        lblActiveMessages.setText("Active messages:");
 
         javax.swing.GroupLayout panelUserInfoLayout = new javax.swing.GroupLayout(panelUserInfo);
         panelUserInfo.setLayout(panelUserInfoLayout);
@@ -97,10 +108,6 @@ public class ProfileView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtFieldCreated, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(panelUserInfoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblActiveMessages)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelUserInfoLayout.setVerticalGroup(
             panelUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,10 +124,20 @@ public class ProfileView extends javax.swing.JFrame {
                 .addGroup(panelUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtFieldCreated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCreated))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                .addComponent(lblActiveMessages)
-                .addContainerGap())
+                .addContainerGap(58, Short.MAX_VALUE))
         );
+
+        lblActiveMessages.setText("Active messages:");
+
+        tableMessages.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Message Title", "Date"
+            }
+        ));
+        jScrollPane1.setViewportView(tableMessages);
 
         javax.swing.GroupLayout panelUserMessagesLayout = new javax.swing.GroupLayout(panelUserMessages);
         panelUserMessages.setLayout(panelUserMessagesLayout);
@@ -128,15 +145,21 @@ public class ProfileView extends javax.swing.JFrame {
             panelUserMessagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelUserMessagesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtFieldMessages, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
+                .addGroup(panelUserMessagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelUserMessagesLayout.createSequentialGroup()
+                        .addComponent(lblActiveMessages)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         panelUserMessagesLayout.setVerticalGroup(
             panelUserMessagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelUserMessagesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtFieldMessages, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelUserMessagesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblActiveMessages)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnClose.setText("Close");
@@ -146,12 +169,21 @@ public class ProfileView extends javax.swing.JFrame {
             }
         });
 
+        btnNewMessage.setText("New Message");
+        btnNewMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewMessageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnNewMessage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -159,7 +191,9 @@ public class ProfileView extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnClose)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnClose)
+                    .addComponent(btnNewMessage))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -183,12 +217,13 @@ public class ProfileView extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelUserPhoto, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelUserPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(panelUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(panelUserMessages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelUserMessages, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -200,9 +235,15 @@ public class ProfileView extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 
+    private void btnNewMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewMessageActionPerformed
+        newMessageDemo();
+    }//GEN-LAST:event_btnNewMessageActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnNewMessage;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblActiveMessages;
     private javax.swing.JLabel lblCreated;
     private javax.swing.JLabel lblDateOfBirth;
@@ -210,9 +251,9 @@ public class ProfileView extends javax.swing.JFrame {
     private javax.swing.JPanel panelUserInfo;
     private javax.swing.JPanel panelUserMessages;
     private javax.swing.JPanel panelUserPhoto;
+    private javax.swing.JTable tableMessages;
     private javax.swing.JTextField txtFieldCreated;
     private javax.swing.JTextField txtFieldDateOfBirth;
-    private javax.swing.JTextField txtFieldMessages;
     private javax.swing.JTextField txtFieldUser;
     // End of variables declaration//GEN-END:variables
 
@@ -221,4 +262,36 @@ public class ProfileView extends javax.swing.JFrame {
         this.txtFieldCreated.setText(profile.getCreated().toString());
         this.txtFieldDateOfBirth.setText(profile.getBithDate().toString());
     }
+    
+    private void getMessagesList() {
+        this.setMessagesDTO(userViewModel.getMessagesByProfile(profile));
+        MessageTableModel messageTableModel = new MessageTableModel(this.getMessagesDTO());
+        this.tableMessages.setModel(messageTableModel);
+        
+        configTableHeaders();
+    }
+    
+    private void configTableHeaders(){
+        TableColumnModel usersTableHeader = this.tableMessages.getTableHeader().getColumnModel();
+        
+        usersTableHeader.getColumn(0).setHeaderValue("Message");
+        usersTableHeader.getColumn(1).setHeaderValue("Date");
+    }
+
+    public List<MessageDTO> getMessagesDTO() {
+        return messagesDTO;
+    }
+
+    public void setMessagesDTO(List<MessageDTO> messagesDTO) {
+        this.messagesDTO = messagesDTO;
+    }
+
+    private void newMessageDemo() {
+       getUserViewModel().postNewMessage(this.profile, new MessageDTO("J.Al", "Foo message by " + this.profile.getFullName(), new Date()));
+    }
+
+    public UserViewModel getUserViewModel() {
+        return userViewModel;
+    }
+    
 }

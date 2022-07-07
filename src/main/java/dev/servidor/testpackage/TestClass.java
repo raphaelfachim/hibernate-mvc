@@ -18,7 +18,7 @@ public class TestClass {
             ProfileBO profileBo = new ProfileBO(userViewModel.getTm());
             MessageBO messageBo = new MessageBO(userViewModel.getTm());
             
-//            Profile lucas = profileBo.crateProfile("Lucas", "Pereira", "22/05/1998");
+            Profile lucas = profileBo.crateProfile("Lucas", "Pereira", "22/05/1998");
 //            Profile raphael = profileBo.crateProfile("Raphael", "Fachim", "09/11/1998");
 //            Profile sara = profileBo.crateProfile("Sara", "Hansen", "04/03/1992");
 //            Profile bianca = profileBo.crateProfile("Bianca", "Andrade", "14/11/2000");
@@ -30,9 +30,9 @@ public class TestClass {
 //            Message mes2 = new Message();
 //            mes2.setMessage("Mes 2");
 //            
-//            lucas.getMessages().add(mes1);
-//            lucas.getMessages().add(mes2);
-
+//            lucas.addMessage(mes1);
+//            lucas.addMessage(mes2);
+//
 //            userViewModel.saveProfile(lucas);
 //            userViewModel.saveProfile(raphael);
 //            userViewModel.saveProfile(sara);

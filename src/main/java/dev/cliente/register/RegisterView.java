@@ -5,6 +5,8 @@
  */
 package dev.cliente.register;
 
+import dev.cliente.baseinternal.BaseInternalFrame;
+import dev.cliente.mainframe.MainFrame;
 import dev.servidor.bean.Profile;
 import dev.servidor.model.UserViewModel;
 import dev.servidor.util.DateUtils;
@@ -16,7 +18,7 @@ import javax.swing.JOptionPane;
  *
  * @author raphael.fachim
  */
-public class RegisterView extends javax.swing.JFrame {
+public class RegisterView extends BaseInternalFrame {
 
     /**
      * Creates new form RegisterView
@@ -24,8 +26,12 @@ public class RegisterView extends javax.swing.JFrame {
     
     private final UserViewModel userViewModel = new UserViewModel();
     
-    public RegisterView() {
+    private MainFrame mainFrame;
+    
+    public RegisterView(MainFrame mainFrame) {
         initComponents();
+        
+        this.mainFrame = mainFrame;
     }
 
     /**

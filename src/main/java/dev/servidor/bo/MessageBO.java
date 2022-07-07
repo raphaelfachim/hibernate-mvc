@@ -15,13 +15,13 @@ public class MessageBO {
     
     private static final MessageDAO messageDao = new MessageDAO();
     
-    private ProfileBO profileBo;
+//    private ProfileBO profileBo;
     
     private final TransactionManager tm;
 
     public MessageBO(TransactionManager tm) {
         this.tm = tm;
-        this.profileBo = new ProfileBO(tm);
+//        this.profileBo = new ProfileBO(tm);
     }
     
     public void saveMessage(Message message){
@@ -37,9 +37,9 @@ public class MessageBO {
         return createMessageDTO(message);
     }
 
-    public List<MessageDTO> getMessageByProfile(Profile profile) {
+    public List<MessageDTO> getMessageByProfile(ProfileDTO profileDTO) {
         List<MessageDTO> messages = new ArrayList<MessageDTO>();
-        for(Message message : messageDao.getMessageByProfile(tm, profile)){
+        for(Message message : messageDao.getMessageByProfile(tm, profileDTO.getId())){
             messages.add(createMessageDTO(message));
         }
         return messages;           
@@ -54,16 +54,22 @@ public class MessageBO {
         return profileDTO;
     }
     
-    public Message createMessage(String message, ProfileDTO profileDTO){
-        Profile profile = profileBo.getProfileById(profileDTO.getId());
+//    public Message createMessage(String message, ProfileDTO profileDTO){
+//        Profile profile = profileBo.getProfileById(profileDTO.getId());
+//        return new Message(
+//                message, profile, new Date()
+//        );
+//    }
+    
+    public Message createMessage(String message, Profile profile){
         return new Message(
                 message, profile, new Date()
         );
     }
     
-    public Message createMessage(String message, Profile profile){
+    public Message createMessage(MessageDTO messageDTO){
         return new Message(
-                message, profile, new Date()
+                messageDTO.getMessage(), new Date()
         );
     }
 }

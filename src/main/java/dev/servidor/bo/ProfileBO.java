@@ -2,7 +2,9 @@ package dev.servidor.bo;
 
 import dev.servidor.bo.transactionmanager.TransactionManager;
 import dev.servidor.bean.Profile;
+import dev.servidor.bean.Message;
 import dev.servidor.dao.implementation.ProfileDAO;
+import dev.servidor.dto.MessageDTO;
 import dev.servidor.dto.ProfileDTO;
 import dev.servidor.util.DateUtils;
 import java.text.ParseException;
@@ -15,9 +17,12 @@ public class ProfileBO {
     private static final ProfileDAO profileDao = new ProfileDAO();
     
     private final TransactionManager tm;
+    
+    private final MessageBO messageBo;
 
     public ProfileBO(TransactionManager tm) {
         this.tm = tm;
+        messageBo = new MessageBO(tm);
     }
 
     public Profile saveProfile(Profile profile){
@@ -36,6 +41,25 @@ public class ProfileBO {
     public ProfileDTO getProfileByFullName(String fullName) {
         Profile profile = profileDao.getProfileByFullName(tm, fullName);
         return createProfileDTO(profile);
+    }
+    
+    public void postNewMessage(ProfileDTO profileDTO, MessageDTO messageDTO){
+        Message message = messageBo.createMessage(messageDTO);
+        Profile profile = getProfileById(profileDTO.getId());
+        profile.addMessage(message);
+        saveProfile(profile);   
+    }
+    
+    public List<MessageDTO> getMessages(ProfileDTO profileDTO){
+        List<MessageDTO> messagesDTO = new ArrayList();
+        
+        Profile profile = getProfileById(profileDTO.getId());
+        List<Message> messages = profile.getMessages();
+        for(Message message : messages){
+            messagesDTO.add(messageBo.createMessageDTO(message));
+        }
+        
+        return messagesDTO;
     }
     
     public ProfileDTO createProfileDTO(Profile profile){

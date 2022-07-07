@@ -37,7 +37,7 @@ public class Profile implements Serializable {
         @Temporal(javax.persistence.TemporalType.DATE)
 	private Date birthDate;
         
-        @OneToMany(mappedBy = "profile", cascade = CascadeType.PERSIST)
+        @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
 	private List<Message> messages = new ArrayList();
 
 	public Profile() {
@@ -108,5 +108,10 @@ public class Profile implements Serializable {
 	public void setMessages(List<Message> messages) {
 		this.messages = messages;
 	}
+        
+        public void addMessage(Message message){
+            this.getMessages().add(message);
+            message.setProfile(this);
+        }
 	
 }

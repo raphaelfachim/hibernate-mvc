@@ -2,6 +2,7 @@ package dev.servidor.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,7 +26,7 @@ public class Message implements Serializable {
 	@Column(name = "MESSAGE_TEXT")
 	private String message;
         
-        @ManyToOne
+        @ManyToOne(cascade = CascadeType.PERSIST)
         @JoinColumn(name="PROFILE_ID")
 	private Profile profile;
         
@@ -48,6 +49,11 @@ public class Message implements Serializable {
         public Message(String message, Profile profile, Date date) {
             this.message = message;
             this.profile = profile;
+            this.date = date;
+        }
+
+        public Message(String message, Date date) {
+            this.message = message;
             this.date = date;
         }
 
