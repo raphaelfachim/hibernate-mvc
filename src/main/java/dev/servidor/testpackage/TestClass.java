@@ -18,12 +18,12 @@ public class TestClass {
             ProfileBO profileBo = new ProfileBO(userViewModel.getTm());
             MessageBO messageBo = new MessageBO(userViewModel.getTm());
             
-            Profile lucas = profileBo.crateProfile("Lucas", "Pereira", "22/05/1998");
-//            Profile raphael = profileBo.crateProfile("Raphael", "Fachim", "09/11/1998");
-//            Profile sara = profileBo.crateProfile("Sara", "Hansen", "04/03/1992");
-//            Profile bianca = profileBo.crateProfile("Bianca", "Andrade", "14/11/2000");
-//            Profile maria = profileBo.crateProfile("Maria", "de Lourdes", "07/08/2001");
-//            Profile joao = profileBo.crateProfile("João", "Santos", "19/01/1999");
+//            Profile lucas = profileBo.crateProfile("Lucas", "Pereira", "22/05/1998");
+            Profile raphael = profileBo.crateProfile("Raphael", "Fachim", "09/11/1998");
+            Profile sara = profileBo.crateProfile("Sara", "Hansen", "04/03/1992");
+            Profile bianca = profileBo.crateProfile("Bianca", "Andrade", "14/11/2000");
+            Profile maria = profileBo.crateProfile("Maria", "de Lourdes", "07/08/2001");
+            Profile joao = profileBo.crateProfile("João", "Santos", "19/01/1999");
 //            Message mes1 = new Message();
 //            mes1.setMessage("Mes 1");
 //            
@@ -34,11 +34,11 @@ public class TestClass {
 //            lucas.addMessage(mes2);
 //
 //            userViewModel.saveProfile(lucas);
-//            userViewModel.saveProfile(raphael);
-//            userViewModel.saveProfile(sara);
-//            userViewModel.saveProfile(bianca);
-//            userViewModel.saveProfile(maria);
-//            userViewModel.saveProfile(joao);
+            userViewModel.saveProfile(raphael);
+            userViewModel.saveProfile(sara);
+            userViewModel.saveProfile(bianca);
+            userViewModel.saveProfile(maria);
+            userViewModel.saveProfile(joao);
 //            List<Message> messages = new ArrayList<Message>();
 //            
 //            Message m1 = userViewModel.createMessage("Message 1", profileBo.createProfileDTO(lucas));
@@ -51,7 +51,7 @@ public class TestClass {
             
 //            ProfileDTO profile = userViewModel.getProfileByFullName("Lucas Pereira");
 //            userViewModel.saveMessage(messageBo.createMessage("Mensagem de Lucas Pereira", profile));
-            userViewModel.getAllProfiles();
+//            userViewModel.getAllProfiles();
             userViewModel.getTm().closeSessionFactory();
 	}
 	
